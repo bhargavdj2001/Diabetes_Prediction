@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %} {% endblock %}
+
+{% block body %}
+<header><h2>Diabetes Predictor</h2></header>
+
+<div class="box">
+    <h3>Find the Probability of you having diabetes</h3>
+    <div class="form-1">
+    <form action="/predict" method="POST" name="form-1">
+        <label for="preg">Pregnancies</label>
+        <input type="text" name="1">
+        <label for="glu">Glucose</label>
+        <input type="text" name="2">  
+        <label for="bp">Blood Pressure</label>
+        <input type="text" name="3">
+        <label for="skin">Skin Thickness</label>
+        <input type="text" name="4">
+        <label for="insulin">Insulin</label>
+        <input type="text" name="5">
+        <label for="bmi">BMI</label>
+        <input type="text" name="6">
+        <label for="dpf">Diabetes Pedigree Function</label>
+        <input type="text" name="7">
+        <label for="age">Age</label>
+        <input type="text" name="8">
+        <button type="submit">Predict Probability</button>
+    </form>
+    </div>
+    {% if t==1 %}
+    {% if out>0.5 %}
+    <h3 id="yes">You are at a higher risk of having diabetes. The probability is {{out}}.</h3>
+    {% else %}
+    <h3 id="no">You are at a lower risk of having diabetes. The probability is {{out}}</h3>
+    {% endif %}
+{% endif %}
+    
+</div>
+{% endblock %}
