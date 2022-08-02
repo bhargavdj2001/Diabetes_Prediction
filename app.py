@@ -7,35 +7,24 @@ app = Flask(__name__)
 model = pickle.load(open("Diabetes.pkl", "rb"))  ##loading model
 
 
-@app.route('/')             ## Defining main index route
+@app.route('/', methods=['POST', 'GET'])             ## Defining main index route
 def home():
-    return render_template("index.html", t=0)   ## showing index.html as homepage
+    if request.method=='POST':
+        text1 = request.form['1']      
+        text2 = request.form['2'] 
+        text3 = request.form['3']
+        text4 = request.form['4']
+        text5 = request.form['5']
+        text6 = request.form['6']
+        text7 = request.form['7']
+        text8 = request.form['8']
 
-
-@app.route('/predict',methods=['POST','GET'])  ## this route will be called when predict button is called
-def predict(): 
-    #int_features=[float(x) for x in request.form.values()]
-    text1 = request.form['1']      ## Fetching each input field value one by one
-    text2 = request.form['2'] 
-    text3 = request.form['3']
-    text4 = request.form['4']
-    text5 = request.form['5']
-    text6 = request.form['6']
-    text7 = request.form['7']
-    text8 = request.form['8']
-
-    row_df = pd.DataFrame([pd.Series([text1,text2,text3,text4,text5,text6,text7,text8])])  ### Creating a dataframe using all the values
-    print(row_df)
-    prediction=model.predict_proba(row_df) ## Predicting the output
-    output='{0:.{1}f}'.format(prediction[0][1], 2)    ## Formatting output
-
-    '''
-    if output>str(0.5):
-        return render_template('index.html',pred='You have chance of having diabetes.\nProbability of having Diabetes is {}'.format(output)) ## Returning the message for use on the same index.html page
+        row_df = pd.DataFrame([pd.Series([text1,text2,text3,text4,text5,text6,text7,text8])])  ### Creating a dataframe using all the values
+        prediction=model.predict_proba(row_df) ## Predicting the output
+        output='{0:.{1}f}'.format(prediction[0][1], 2)    ## Formatting output
+        return render_template('index.html', t=1, out = float(output))
     else:
-        return render_template('index.html',pred='You are safe.\n Probability of having diabetes is {}'.format(output)) 
-    '''
-    return render_template('index.html', t=1, out = float(output))
+        return render_template('index.html', t=0)
 
 
 if __name__ == '__main__':
